@@ -31,6 +31,48 @@ Fill out [this form](https://censoc-download.demog.berkeley.edu/) to access the 
 
 * Which four months have the highest number of deaths? Why? What does that suggest about the influence of global warming on mortality?
 
+```{r sc1, cache=TRUE}
+# There are several reasonable ways of dealing with zip'd data. One is to do
+# things by-hand, placing the new directory someplace sensible. Another is to
+# have the code start with the zipped file. This is good because the less times
+# that you do anything by hand the better. But it is annoying because you have
+# to design your script so that you don't repeat a step that has already
+# happened. For now, I will just comment out unzip(). But, if this were updated
+# each day, I would handle this programmatically.
+
+# unzip("censoc_dmf_v1.zip")
+
+raw <- read_csv("censoc_dmf_v1.csv",
+                col_types = cols(HISTID = col_character(),
+                                 byear = col_double(),
+                                 bmonth = col_double(),
+                                 dyear = col_double(),
+                                 dmonth = col_double(),
+                                 death_age = col_double(),
+                                 weight = col_double())) %>% 
+  filter(! bmonth == 0) 
+```
+
+```{r sc1a}
+raw %>% 
+  arrange(desc(death_age))
+```
+
+```{r sc1b}
+raw %>% 
+  group_by(byear) %>% 
+  summarize(avg_death_age = mean(death_age)) %>% 
+  top_n(2, avg_death_age)
+```
+
+```{r sc1c}
+raw %>% 
+  group_by(dmonth) %>% 
+  summarize(total = n()) %>% 
+  top_n(4, total)
+```
+
+
 
 ## Scene 2
 
