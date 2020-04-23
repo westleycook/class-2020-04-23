@@ -1,0 +1,64 @@
+---
+title: "Working with Big Data"
+author: "David Kane"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(lubridate)
+library(gganimate)
+library(tidyverse)
+```
+
+This month, the [CenSoc Project](https://censoc.berkeley.edu/) at Berkeley released the first version of their individual-level data sets with information on almost everyone in the 1940 U.S. Census. The data is available to us. Today's project is to work with Big Data for real. (If you want to spend more time on machine learning, go through the examples in chapter 14.)
+
+Fill out [this form](https://censoc-download.demog.berkeley.edu/) to access the data. You should receive an e-mail with a link to a page [like this one](https://censoc-download.demog.berkeley.edu/Data/Qm958Kq901/). (Do not use that page.) Download just the censoc_dmf_v1.zip file. Unzip it and place the `censoc_dmf_v1.csv` in your project. (Do not check this in to Github. It is too big.)
+
+
+## Scene 1
+
+* Read in the data into a tibble called `raw`. Make sure to use the `col_types` argument so that you code does not produce aesthetically offensive messages. 
+
+* Be professional. Give your R code chunks names. Use `cache=TRUE` as a code chunk option for any chunk that takes a long time to run.
+
+* Once you have the data, take a look. There is at least one bad row. Find it and change your code so that it is not read in to `raw`.
+
+* How many rows (individual men) do we have in the data? Big data!
+
+* Consider the oldest man in the dataset. (All the observation are male.) What year was he born in?
+
+* Calculate the average age at death by birth year. What two years have the highest average? Why? Without looking can you guess which years have the lowest average?
+
+* Which four months have the highest number of deaths? Why? What does that suggest about the influence of global warming on mortality?
+
+
+## Scene 2
+
+This data set is not easy to work with because it has no dates. It just has months and years. Create a new variable, `death_date`, defined as the first day of the month when someone died, even though we don't have exact day information. Drop all the variables except `death_date` and `death_age`. A smaller data set will be easier to work with. Call this new tibble `x`.
+
+Hint: **lubridate** is a useful package. I used `ymd()`, with a little hackery, but there are other ways. Make a character and then convert it is one approach . . .
+
+Create a plot like the [one on Piazza](https://piazza.com/class/k5y1jx0s5ibe1?cid=776) which shows a histogram of ages at death.
+
+Don't try to get this working on the whole data set at once. That takes forever. Create a small data set called `small` with about 10,000 rows randomly sampled from `x` first. Use `small` for everything. Then, when the plot looks good, use `x`. 
+
+
+
+
+## Scene 3
+
+Make a [cool animation](https://davidkane9.github.io/PPBDS/C-animation.html) with this data. First step is to build an interesting static graphic, using all your favorite **ggplot** tools. Then animate it in an interesting way. See the [one on Piazza](https://piazza.com/class/k5y1jx0s5ibe1?cid=776)  for my example. Do something similar, or better!
+
+Hint: Always work with small data first! Get that working and then use big data. 
+
+Hint: If you `group_by()` first, things go faster since you don't want to manipulate 5 million rows unless you have to. 
+
+Although you can go back and grab `dmonth`, you don't need to! You can work just with `x` and figure out the month by using the `month()` function.
+
+
+
+## Challenge Problem
+
+Use this data and the [d3rain package](https://github.com/daranzolin/d3rain) to create a cool animation with this data. Perhaps birth years across the top. The rain falls down to either death years or to ages at death. Or something else. Impress us! Put your animation on Rpubs and leave a link on Piazza.
