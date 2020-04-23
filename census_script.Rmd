@@ -81,6 +81,45 @@ This data set is not easy to work with because it has no dates. It just has mont
 Create a plot like the one on Piazza which shows a histogram of ages at death.
 
 
+```{r s2, cache=TRUE}
+# Separating your data processing into different code chunks can be useful. Once
+# you have read the data in once, you don't want to do it 50 more times.
+
+# In order to get this code to wor, 
+
+x <- raw %>% 
+  mutate(death_date = ymd(paste(dyear, dmonth, "01", sep = "-"))) %>% 
+  select(death_date, death_age)
+
+# There is no need to work with 5 million rows of data until you are use sure
+# you code is working. Instead, get everything working with 10,000, and then go
+# back. I use the small data set until things work, then switch in x.
+.
+small <- x %>% 
+  sample_n(10000)
+
+z2 <- x %>% 
+  group_by(death_age) %>% 
+  summarize(deaths = n())
+```
+
+
+```{r sc2a}
+sc2_p <- z2 %>% 
+  ggplot(aes(x = death_age, y = deaths)) + 
+    geom_col() +
+    labs(x = "Age at Death",
+         y = "Total Number",
+         title = "Number of Deaths for Each Age",
+         subtitle = "Ages at death is normalesque . . .",
+         caption = "1940 US Census Mortality Data from CenSoc")
+
+sc2_p
+
+# ggsave("scene2.jpg", sc2_p)
+```
+
+
 ## Scene 3
 
 Make a [cool animation](https://davidkane9.github.io/PPBDS/C-animation.html) with this data. First step is to build an interesting static graphic, using all your favorite **ggplot** tools. Then animate it in an interesting way. See Piazza for my (broken!) example. Do something similar, or better!
